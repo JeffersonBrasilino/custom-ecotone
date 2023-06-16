@@ -1,0 +1,80 @@
+{
+    "name": "jeffersonbrasilino/customfreight",
+    "description": "core package for php projects opnative using ddd, cqrs, eda with laravel and ecotone framework",
+    "type": "library",
+    "require": {
+        "laravel/framework": "^9.0|^10.0",
+        "ecotone/enqueue": "^1.82",
+        "ecotone/jms-converter": "^1.82",
+        "ecotone/lite-application": "^1.82",
+        "ecotone/redis": "^1.82",
+        "ecotone/sqs": "^1.82",
+        "enqueue/enqueue": "^0.10.18",
+        "enqueue/rdkafka": "^0.10.18",
+        "guzzlehttp/guzzle": "^7.7",
+        "ecotone/laravel": "^1.73"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.17",
+        "marcocesarato/php-conventional-changelog": "^1.17",
+        "mockery/mockery": "^1.5",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^10.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Frete\\Core\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ecotone\\Laravel\\EcotoneProvider"
+            ]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jefferson Brasilino",
+            "email": "jefferson.sales@fretebras.com.br"
+        }
+    ],
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "process-timeout": 0
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "code-analyze": " php -d memory_limit=-1 vendor/bin/phpstan analyze",
+        "code-analyze:report": " php -d memory_limit=-1 vendor/bin/phpstan analyze --error-format=gitlab > ${REPORT_PATH}quality.json || true",
+        "check-style": "vendor/bin/php-cs-fixer fix --diff --verbose --dry-run .",
+        "lint-fix": "vendor/bin/php-cs-fixer fix .",
+        "lint-validation": "vendor/bin/php-cs-fixer fix -v --using-cache no --dry-run --stop-on-violation",
+        "unit-test": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --testdox --path-coverage",
+        "unit-test:unit": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --testsuite=Unit --testdox",
+        "unit-test:integration": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --testsuite=Integration --testdox",
+        "unit-test:coverage": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --coverage-html=coverage --log-junit coverage/logfile.xml --coverage-clover coverage/coverage.xml --testdox",
+        "unit-test:coverage-all": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --coverage-html=coverage --log-junit coverage/logfile.xml --coverage-clover coverage/coverage.xml --testdox --path-coverage",
+        "unit-test:report": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --testdox --coverage-text --coverage-clover=coverage/coverage.xml --log-junit=coverage/logfile.xml",
+        "unit-test:report-all": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --testdox --coverage-text --coverage-clover=coverage/coverage.xml --log-junit=coverage/logfile.xml --path-coverage",
+        "unit-test:debug": "php -d memory_limit=-1 -d display_errors=on -d xdebug.mode=debug -d xdebug.client_host=127.0.0.1 -d xdebug.client_port=9003 -d xdebug.start_with_request=1 vendor/bin/phpunit --configuration phpunit.xml --testdox",
+        "changelog": "conventional-changelog",
+        "release": "conventional-changelog --commit",
+        "release:patch": "conventional-changelog --patch --commit",
+        "release:minor": "conventional-changelog --minor --commit",
+        "release:major": "conventional-changelog --major --commit"
+    },
+    "version": "0.0.1"
+}
