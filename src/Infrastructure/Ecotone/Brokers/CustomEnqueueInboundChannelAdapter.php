@@ -7,12 +7,12 @@ namespace Frete\Core\Infrastructure\Ecotone\Brokers;
 use Ecotone\Enqueue\EnqueueInboundChannelAdapter;
 use Ecotone\Messaging\Endpoint\PollingConsumer\ConnectionException;
 use Ecotone\Messaging\Message;
-use Exception;
 use Interop\Queue\Message as EnqueueMessage;
 
 abstract class CustomEnqueueInboundChannelAdapter extends EnqueueInboundChannelAdapter
 {
     private bool $initialized = false;
+    private array $activeConsumerPartitions = [];
 
     public function receiveMessage(int $timeout = 0): ?Message
     {
@@ -33,11 +33,12 @@ abstract class CustomEnqueueInboundChannelAdapter extends EnqueueInboundChannelA
                 return null;
             }
 
-            if (is_array($consumableParamsMessage)) {
+            if (is_array($consumableParamsMessage) && !in_array($consumableParamsMessage['partition'], $this->activeConsumerPartitions)) {
                 // @phpstan-ignore-next-line
                 $consumer->getQueue()->setPartition($consumableParamsMessage['partition']);
                 // @phpstan-ignore-next-line
                 $consumer->setOffset($consumableParamsMessage['offset']);
+                $this->activeConsumerPartitions[] = $consumableParamsMessage['partition'];
             }
 
             /** @var ?EnqueueMessage $message */
@@ -50,7 +51,7 @@ abstract class CustomEnqueueInboundChannelAdapter extends EnqueueInboundChannelA
             $convertedMessage = $this->enrichMessage($message, $convertedMessage);
 
             return $convertedMessage->build();
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             // @phpstan-ignore-next-line
             if ($this->isConnectionException($exception) || ($exception->getPrevious() && $this->isConnectionException($exception->getPrevious()))) {
                 throw new ConnectionException('There was a problem while polling message channel', 0, $exception);
@@ -65,9 +66,9 @@ abstract class CustomEnqueueInboundChannelAdapter extends EnqueueInboundChannelA
         return true;
     }
 
-    private function isConnectionException(Exception $exception): bool
+    private function isConnectionException(\Exception $exception): bool
     {
         // @phpstan-ignore-next-line
-        return is_subclass_of($exception, $this->connectionException()) || $exception::class === $this->connectionException();
+        return is_subclass_of($exception, $this->connectionException()) || $this->connectionException() === $exception::class;
     }
 }

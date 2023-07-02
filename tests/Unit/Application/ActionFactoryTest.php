@@ -23,13 +23,13 @@ class ActionFactoryTest extends TestCase
 
     public function testConstructorSuccessWithCorrectlyData()
     {
-        $this->assertInstanceOf(IActionFactory::class, $this->sut);
+        $this->assertInstanceOf(ActionFactory::class, $this->sut);
     }
 
     public function testConstructorErrorWithIncorrectlyData()
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('an enum instance is expected for the action record.');
+        $this->expectExceptionMessage('an enum instance is expected.');
         new ActionFactory(stdClass::class);
     }
 

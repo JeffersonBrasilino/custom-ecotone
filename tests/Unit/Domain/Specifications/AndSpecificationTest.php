@@ -19,10 +19,30 @@ class AndSpecificationTest extends TestCase
         $this->assertTrue($spec->isSatisfiedBy('foo'));
     }
 
-    public function testIsNotSatisfiedBy(): void
+    public function testIsNotSatisfiedByLeft(): void
+    {
+        $spec1 = $this->createMock(Specification::class);
+        $spec1->method('isSatisfiedBy')->willReturn(false);
+        $spec2 = $this->createMock(Specification::class);
+        $spec2->method('isSatisfiedBy')->willReturn(true);
+        $spec = new AndSpecification($spec1, $spec2);
+        $this->assertFalse($spec->isSatisfiedBy('foo'));
+    }
+
+    public function testIsNotSatisfiedByRight(): void
     {
         $spec1 = $this->createMock(Specification::class);
         $spec1->method('isSatisfiedBy')->willReturn(true);
+        $spec2 = $this->createMock(Specification::class);
+        $spec2->method('isSatisfiedBy')->willReturn(false);
+        $spec = new AndSpecification($spec1, $spec2);
+        $this->assertFalse($spec->isSatisfiedBy('foo'));
+    }
+
+    public function testIsNotSatisfiedByBoth(): void
+    {
+        $spec1 = $this->createMock(Specification::class);
+        $spec1->method('isSatisfiedBy')->willReturn(false);
         $spec2 = $this->createMock(Specification::class);
         $spec2->method('isSatisfiedBy')->willReturn(false);
         $spec = new AndSpecification($spec1, $spec2);

@@ -6,7 +6,7 @@ namespace Tests\Unit\Application\Stubs;
 
 use Frete\Core\Application\Command;
 
-class ActionStub implements Command
+class ActionStub extends Command
 {
 }
 
