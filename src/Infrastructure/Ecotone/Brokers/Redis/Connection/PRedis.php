@@ -7,8 +7,8 @@ namespace Frete\Core\Infrastructure\Ecotone\Brokers\Redis\Connection;
 use Enqueue\Redis\Redis;
 use Enqueue\Redis\RedisResult;
 use Predis\Client;
-use Predis\Response\ServerException as PRedisServerException;
 use Predis\Response\ServerException;
+use Predis\Response\ServerException as PRedisServerException;
 
 class PRedis implements Redis
 {

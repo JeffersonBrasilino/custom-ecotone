@@ -25,7 +25,7 @@ class AttributeValidator extends Validator
     public function getErrorMessage()
     {
         return [
-            $this->attribute => $this->validator->getErrorMessage()
+            $this->attribute => $this->validator->getErrorMessage(),
         ];
     }
 

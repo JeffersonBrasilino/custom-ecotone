@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Frete\Core\Domain;
 
-use DateTimeImmutable;
-
 abstract class Event
 {
     public function __construct(
@@ -13,7 +11,7 @@ abstract class Event
         public readonly ?array $data = [],
         public readonly ?string $schema = 'https://schema.org/',
         public readonly ?string $version = '1.0',
-        public readonly ?DateTimeImmutable $occurredOn = new DateTimeImmutable()
+        public readonly ?\DateTimeImmutable $occurredOn = new \DateTimeImmutable()
     ) {
     }
 }

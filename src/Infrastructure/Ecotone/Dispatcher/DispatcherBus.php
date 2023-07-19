@@ -13,7 +13,6 @@ use Frete\Core\Domain\EventStore;
 use Frete\Core\Infrastructure\Errors\InfrastructureError;
 use Frete\Core\Infrastructure\Messaging\MetadataStore;
 use Frete\Core\Shared\Result;
-use Throwable;
 
 class DispatcherBus implements Dispatcher, EventStoreDispatcher
 {
@@ -24,37 +23,40 @@ class DispatcherBus implements Dispatcher, EventStoreDispatcher
     ) {
     }
 
-    public function dispatch(Action|Event $message, array $messageMetadata = []): Result
+    public function dispatch(Action|Event $message): Result
     {
         try {
-            if ($message instanceof Command) {
+            if (is_a($message, Command::class)) {
                 return $this->commandBus->send($message);
             }
 
-            if ($message instanceof Query) {
+            if (is_a($message, Query::class)) {
                 return $this->queryBus->send($message);
             }
 
-            if ($message instanceof Event) {
-                $this->eventBus->convertAndSendWithMetadata($message, metadata: $messageMetadata);
+            if (is_a($message, Event::class)) {
+                if (is_a($message, MetadataStore::class)) {
+                    $this->eventBus->convertAndSendWithMetadata($message, $message->getAllMetadata());
+                } else {
+                    $this->eventBus->convertAndSend($message);
+                }
+
                 return Result::success(true);
             }
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return Result::failure(new InfrastructureError($e->getMessage()));
         }
 
         return Result::failure(new InfrastructureError('Message not supported.'));
     }
 
-	public function dispatchStore(EventStore $store): void
+    public function dispatchStore(EventStore $store): Result
     {
         foreach ($store->getEvents() as $event) {
-            $metadata = [];
-            if(is_subclass_of($event, MetadataStore::class)) {
-                $metadata = $event->getAllMetadata();
-            }
-            $this->dispatch($event, $metadata);
+            $this->dispatch($event);
             $store->commitEvent($event);
         }
-	}
+
+        return Result::success(true);
+    }
 }

@@ -7,7 +7,6 @@ namespace Frete\Core\Infrastructure\Ecotone\Brokers\Redis\Connection;
 use Enqueue\Redis\Redis;
 use Enqueue\Redis\RedisContext;
 use Interop\Queue\ConnectionFactory;
-use Enqueue\Redis\RedisConnectionFactory as EnqueueFactory;
 use Interop\Queue\Context;
 
 class RedisConnectionFactory implements ConnectionFactory
@@ -19,7 +18,7 @@ class RedisConnectionFactory implements ConnectionFactory
      */
     private $redis;
 
-    public function __construct(array $config)
+    public function __construct(array|Redis $config)
     {
         if ($config instanceof Redis) {
             $this->redis = $config;
@@ -44,11 +43,12 @@ class RedisConnectionFactory implements ConnectionFactory
 
     private function createRedis(): Redis
     {
-        if (!is_array($this->config) || empty($this->config))
+        if (!is_array($this->config) || empty($this->config)) {
             throw new \Exception('array connection for custom redis connection is invalid');
+        }
 
-        if (false == $this->redis) {
-            $this->redis = new PRedis($this->config); //CUSTOM CONNECTION
+        if (!$this->redis instanceof Redis) {
+            $this->redis = new PRedis($this->config);
             $this->redis->connect();
         }
 

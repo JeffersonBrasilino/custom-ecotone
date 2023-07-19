@@ -16,6 +16,7 @@ abstract class AbstractFactory
         if ($instance instanceof $className) {
             return $instance;
         }
+
         return null;
     }
 

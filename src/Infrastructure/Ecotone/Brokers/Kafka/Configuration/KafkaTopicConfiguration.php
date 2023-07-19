@@ -18,6 +18,7 @@ final class KafkaTopicConfiguration
     public function setpublisherPartition(int $publisherPartition): self
     {
         $this->publisherPartition = $publisherPartition;
+
         return $this;
     }
 
@@ -29,6 +30,7 @@ final class KafkaTopicConfiguration
     public function setpublisherKey(string $publisherKey): self
     {
         $this->publisherKey = $publisherKey;
+
         return $this;
     }
 
@@ -40,6 +42,7 @@ final class KafkaTopicConfiguration
     public function setConsumerPartitions(array $consumerPartitions): self
     {
         $this->consumerPartitions = $consumerPartitions;
+
         return $this;
     }
 }

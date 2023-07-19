@@ -11,12 +11,10 @@ class IntegerValidator extends Validator
     public function validate(mixed $input): bool
     {
         $this->isValid = is_int($input);
+
         return $this->isValid;
     }
 
-    /**
-     * @return null|string
-     */
     public function getErrorMessage(): string|null
     {
         return !$this->isValid ? 'Invalid integer number' : null;

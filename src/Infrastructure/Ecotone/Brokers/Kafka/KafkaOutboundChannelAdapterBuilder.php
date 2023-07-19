@@ -31,14 +31,16 @@ class KafkaOutboundChannelAdapterBuilder extends EnqueueOutboundChannelAdapterBu
     {
         /** @var KafkaConnectionFactory $connectionFactory */
         $connectionFactory = $referenceSearchService->get($this->connectionFactoryReferenceName);
+
         /** @var ConversionService $conversionService */
         $conversionService = $referenceSearchService->get(ConversionService::REFERENCE_NAME);
 
         // call the headers HERE!
         $messageBrokerHeadersReferenceName = new ($this->messageBrokerHeadersReferenceName)();
 
-        $this->topicConfig = $this->topicConfig ?? new KafkaTopicConfiguration();
+        $this->topicConfig ??= new KafkaTopicConfiguration();
         $headerMapper = DefaultHeaderMapper::createWith([], $this->headerMapper, $conversionService);
+
         return new KafkaOutboundChannelAdapter(
             CachedConnectionFactory::createFor(new HttpReconnectableConnectionFactory($connectionFactory)),
             $this->buildKafkaTopic($this->topicName, $this->topicConfig),

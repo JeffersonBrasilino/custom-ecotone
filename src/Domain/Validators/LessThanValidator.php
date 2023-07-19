@@ -15,12 +15,10 @@ class LessThanValidator extends Validator
     public function validate(mixed $input): bool
     {
         $this->isValid = (is_float($input) || is_int($input)) && $input < $this->max;
+
         return $this->isValid;
     }
 
-    /**
-     * @return null|string
-     */
     public function getErrorMessage(): string|null
     {
         return !$this->isValid ? "The value must be numeric and less than {$this->max}" : null;

@@ -35,13 +35,14 @@ final class KafkaOutboundChannelAdapter extends CustomEnqueueOutboundChannelAdap
         /** @var \Enqueue\RdKafka\RdKafkaMessage */
         $kafkaMessage = parent::buildMessage($message);
         $props = $kafkaMessage->getProperties();
-
         if (isset($props['partition']) && is_int($props['partition'])) {
             $kafkaMessage->setPartition($props['partition']);
         }
 
-        if (isset($props['key']) && is_int($props['key'])) {
-            $kafkaMessage->setKey((string) $props['key']);
+        if (is_subclass_of($message->getPayload(), \Frete\Core\Domain\Event::class)) {
+            $messageId = $message->getPayload()->identifier;
+            $kafkaMessage->setMessageId($messageId);
+            $kafkaMessage->setKey($messageId);
         }
 
         return $kafkaMessage;

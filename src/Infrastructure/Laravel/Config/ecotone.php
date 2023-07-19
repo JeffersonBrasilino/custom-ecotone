@@ -1,5 +1,7 @@
 <?php
 
+use Ecotone\Messaging\Config\ModulePackageList;
+
 declare(strict_types=1);
 
 return [
@@ -7,7 +9,7 @@ return [
     'serviceName' => env('ECOTONE_SERVICE_NAME') ? env('ECOTONE_SERVICE_NAME') : env('APP_NAME'),
     'loadAppNamespaces' => true,
     'namespaces' => [
-        'Frete\\Core'
+        'Frete\\Core',
     ],
     // @phpstan-ignore-next-line
     'cacheConfiguration' => env('ECOTONE_CACHE', false),
@@ -16,5 +18,7 @@ return [
     // @phpstan-ignore-next-line
     'defaultErrorChannel' => env('ECOTONE_DEFAULT_ERROR_CHANNEL'),
     'defaultConnectionExceptionRetry' => null,
-    'skippedModulePackageNames' => [],
+    'skippedModulePackageNames' => [
+        ModulePackageList::TEST_PACKAGE,
+    ],
 ];

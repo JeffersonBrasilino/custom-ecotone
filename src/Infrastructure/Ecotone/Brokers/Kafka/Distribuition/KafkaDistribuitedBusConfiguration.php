@@ -65,9 +65,6 @@ class KafkaDistribuitedBusConfiguration
         return in_array($this->distributionType, [self::DISTRIBUTION_TYPE_CONSUMER, self::DISTRIBUTION_TYPE_BOTH]);
     }
 
-    /**
-     * @return string
-     */
     public function getConnectionReference(): string
     {
         return $this->connectionReference;
@@ -84,20 +81,15 @@ class KafkaDistribuitedBusConfiguration
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isDefaultPersistentDelivery(): bool
     {
         return $this->defaultPersistentDelivery;
     }
 
-    /**
-     * @param bool $defaultPersistentDelivery
-     */
     public function withDefaultPersistentDelivery(bool $defaultPersistentDelivery): static
     {
         $this->defaultPersistentDelivery = $defaultPersistentDelivery;
+
         return $this;
     }
 
@@ -106,25 +98,16 @@ class KafkaDistribuitedBusConfiguration
         return $this->defaultPersistentDelivery;
     }
 
-    /**
-     * @return string
-     */
     public function getHeaderMapper(): string
     {
         return $this->headerMapper;
     }
 
-    /**
-     * @return null|string
-     */
     public function getOutputDefaultConversionMediaType(): ?string
     {
         return $this->outputDefaultConversionMediaType;
     }
 
-    /**
-     * @return string
-     */
     public function getReferenceName(): string
     {
         return $this->referenceName;

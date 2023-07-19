@@ -28,7 +28,7 @@ class FreteCoreProvider extends ServiceProvider
         // @phpstan-ignore-next-line
         $this->publishes([
             // @phpstan-ignore-next-line
-            __DIR__ . '/Config/ecotone.php' => config_path('ecotone.php')
+            __DIR__ . '/Config/ecotone.php' => config_path('ecotone.php'),
         ], 'ecotone-frete-core-config');
     }
 }

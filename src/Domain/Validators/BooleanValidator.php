@@ -11,12 +11,10 @@ class BooleanValidator extends Validator
     public function validate(mixed $input): bool
     {
         $this->isValid = is_bool($input);
+
         return $this->isValid;
     }
 
-    /**
-     * @return null|string
-     */
     public function getErrorMessage(): string|null
     {
         return !$this->isValid ? 'Invalid boolean' : null;

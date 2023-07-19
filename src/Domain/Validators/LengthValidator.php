@@ -16,12 +16,10 @@ class LengthValidator extends Validator
     {
         $inputLen = strlen($input);
         $this->isValid = $inputLen >= $this->minLength && $inputLen <= $this->maxLength;
+
         return $this->isValid;
     }
 
-    /**
-     * @return null|string
-     */
     public function getErrorMessage(): string|null
     {
         return !$this->isValid ? 'Invalid length' : null;

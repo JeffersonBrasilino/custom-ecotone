@@ -66,7 +66,7 @@ class KafkaDistribuitionModule
             if ($distributedBusConfiguration->isConsumer()) {
                 Assert::isFalse(ServiceConfiguration::DEFAULT_SERVICE_NAME === $applicationConfiguration->getServiceName(), "Service name can't be default when using distribution. Set up correct Service Name");
                 $channelName = $distributedBusConfiguration->getQueueName();
-                $endpointId = null != $distributedBusConfiguration->getEndpointId() ? $channelName . '-' . $distributedBusConfiguration->getEndpointId() : $applicationConfiguration->getServiceName();
+                $endpointId = null != $distributedBusConfiguration->getEndpointId() ? $distributedBusConfiguration->getEndpointId() : $applicationConfiguration->getServiceName();
                 $configuration->registerMessageChannel(KafkaBackedMessageChannelBuilder::create($channelName, $distributedBusConfiguration->getConnectionReference()));
                 $configuration->registerMessageHandler(
                     TransformerBuilder::createHeaderEnricher([
@@ -158,6 +158,7 @@ class KafkaDistribuitionModule
                         ]
                     )
             )
-            ->registerMessageChannel(SimpleMessageChannelBuilder::createDirectMessageChannel($messagePublisher->getReferenceName()));
+            ->registerMessageChannel(SimpleMessageChannelBuilder::createDirectMessageChannel($messagePublisher->getReferenceName()))
+        ;
     }
 }

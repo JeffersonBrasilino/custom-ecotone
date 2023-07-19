@@ -12,15 +12,14 @@ class OptionalDateValidator extends Validator
     {
         if (null === $input) {
             $this->isValid = true;
+
             return $this->isValid;
         }
         $this->isValid = (new DateValidator())->validate($input);
+
         return $this->isValid;
     }
 
-    /**
-     * @return null|string
-     */
     public function getErrorMessage(): string|null
     {
         return !$this->isValid ? 'Invalid date format' : null;

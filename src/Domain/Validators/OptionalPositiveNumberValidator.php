@@ -12,15 +12,14 @@ class OptionalPositiveNumberValidator extends Validator
     {
         if (null === $input) {
             $this->isValid = true;
+
             return $this->isValid;
         }
         $this->isValid = (new PositiveNumberValidator())->validate($input);
+
         return $this->isValid;
     }
 
-    /**
-     * @return null|string
-     */
     public function getErrorMessage(): string|null
     {
         return !$this->isValid ? 'Not a positive number' : null;

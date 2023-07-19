@@ -7,6 +7,7 @@ namespace Frete\Core\Infrastructure\Ecotone\Brokers;
 use Ecotone\Enqueue\EnqueueInboundChannelAdapter;
 use Ecotone\Messaging\Endpoint\PollingConsumer\ConnectionException;
 use Ecotone\Messaging\Message;
+use Enqueue\RdKafka\RdKafkaConsumer;
 use Interop\Queue\Message as EnqueueMessage;
 
 abstract class CustomEnqueueInboundChannelAdapter extends EnqueueInboundChannelAdapter
@@ -23,6 +24,7 @@ abstract class CustomEnqueueInboundChannelAdapter extends EnqueueInboundChannelA
                 $this->initialized = true;
             }
 
+            /** @var RdKafkaConsumer */
             $consumer = $this->connectionFactory->getConsumer(
                 $this->connectionFactory->createContext()->createQueue($this->queueName)
             );
@@ -34,9 +36,7 @@ abstract class CustomEnqueueInboundChannelAdapter extends EnqueueInboundChannelA
             }
 
             if (is_array($consumableParamsMessage) && !in_array($consumableParamsMessage['partition'], $this->activeConsumerPartitions)) {
-                // @phpstan-ignore-next-line
                 $consumer->getQueue()->setPartition($consumableParamsMessage['partition']);
-                // @phpstan-ignore-next-line
                 $consumer->setOffset($consumableParamsMessage['offset']);
                 $this->activeConsumerPartitions[] = $consumableParamsMessage['partition'];
             }

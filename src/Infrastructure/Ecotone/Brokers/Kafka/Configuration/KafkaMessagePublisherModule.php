@@ -69,7 +69,8 @@ final class KafkaMessagePublisherModule extends NoExternalConfigurationModule im
                         ->withAutoDeclareOnSend($messagePublisher->isAutoDeclareOnSend())
                         ->withHeaderMapper($messagePublisher->getHeaderMapper())
                         ->withDefaultConversionMediaType($mediaType)
-                );
+                )
+            ;
         }
     }
 

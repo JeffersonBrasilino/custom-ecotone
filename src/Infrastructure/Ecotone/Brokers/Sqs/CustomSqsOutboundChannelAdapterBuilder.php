@@ -27,6 +27,7 @@ class CustomSqsOutboundChannelAdapterBuilder extends EnqueueOutboundChannelAdapt
     {
         /** @var SqsConnectionFactory $connectionFactory */
         $connectionFactory = $referenceSearchService->get($this->connectionFactoryReferenceName);
+
         /** @var ConversionService $conversionService */
         $conversionService = $referenceSearchService->get(ConversionService::REFERENCE_NAME);
 
@@ -34,6 +35,7 @@ class CustomSqsOutboundChannelAdapterBuilder extends EnqueueOutboundChannelAdapt
         $messageBrokerHeadersReferenceName = new ($this->messageBrokerHeadersReferenceName)();
 
         $headerMapper = DefaultHeaderMapper::createWith([], $this->headerMapper, $conversionService);
+
         return new CustomSqsOutboundChannelAdapter(
             CachedConnectionFactory::createFor(new HttpReconnectableConnectionFactory($connectionFactory)),
             $this->queueName,

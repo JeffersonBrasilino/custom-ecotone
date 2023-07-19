@@ -33,6 +33,7 @@ final class KafkaInboundChannelAdapterBuilder extends EnqueueInboundChannelAdapt
     {
         /** @var KafkaConnectionFactory $connectionFactory */
         $connectionFactory = $referenceSearchService->get($this->connectionReferenceName);
+
         /** @var ConversionService $conversionService */
         $conversionService = $referenceSearchService->get(ConversionService::REFERENCE_NAME);
 

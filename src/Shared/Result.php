@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Frete\Core\Shared;
 
-use Exception;
-
 class Result
 {
     protected function __construct(protected bool $isSuccess, protected $value, protected $error)
@@ -47,7 +45,7 @@ class Result
         if ($this->isSuccess) {
             try {
                 return self::success($function($this->value));
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return self::failure($e);
             }
         }
@@ -60,7 +58,7 @@ class Result
         if ($this->isSuccess) {
             try {
                 return $function($this->value);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return self::failure($e);
             }
         }

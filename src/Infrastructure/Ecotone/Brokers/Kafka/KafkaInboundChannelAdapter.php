@@ -62,6 +62,7 @@ final class KafkaInboundChannelAdapter extends CustomEnqueueInboundChannelAdapte
             if (-1001 == $val->getOffset()) {
                 $val->setOffset(0);
             }
+
             return $val;
         }, $kafkaConsumer->getCommittedOffsets($topicPartitions, 2000));
 

@@ -11,12 +11,10 @@ class PositiveNumberValidator extends Validator
     public function validate(mixed $input): bool
     {
         $this->isValid = (is_float($input) || is_int($input)) && $input >= 0;
+
         return $this->isValid;
     }
 
-    /**
-     * @return null|string
-     */
     public function getErrorMessage(): string|null
     {
         return !$this->isValid ? 'Not a positive number' : null;

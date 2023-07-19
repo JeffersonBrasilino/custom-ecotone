@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace Frete\Core\Domain;
 
-use ArrayIterator;
-use ArrayObject;
-use Iterator;
-
-class BaseArrayObject extends ArrayObject
+class BaseArrayObject extends \ArrayObject
 {
     protected $data = [];
 
@@ -42,9 +38,9 @@ class BaseArrayObject extends ArrayObject
         return $this->data;
     }
 
-    public function getIterator(): Iterator
+    public function getIterator(): \Iterator
     {
-        return new ArrayIterator($this->data);
+        return new \ArrayIterator($this->data);
     }
 
     public function has($item): bool

@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace Frete\Core\Domain;
 
-use ArrayObject;
-
-abstract class AggregateRoot extends Entity implements EventStore
+abstract class AggregateRoot extends Entity implements EventFactory, EventStore
 {
-    private ArrayObject $eventsToCommit;
-    private ArrayObject $eventsCommited;
+    private \ArrayObject $eventsToCommit;
+    private \ArrayObject $eventsCommited;
 
     public function __construct(string $id)
     {
         parent::__construct($id);
-        $this->eventsToCommit = new ArrayObject();
-        $this->eventsCommited = new ArrayObject();
+        $this->eventsToCommit = new \ArrayObject();
+        $this->eventsCommited = new \ArrayObject();
     }
 
     public function addEvent(Event $event): void
@@ -28,6 +26,11 @@ abstract class AggregateRoot extends Entity implements EventStore
         return $this->eventsToCommit->getArrayCopy();
     }
 
+    private function generateKeyOffset(Event $event): string
+    {
+        return md5(serialize($event));
+    }
+
     public function commitEvent(Event $event): void
     {
         $key = $this->generateKeyOffset($event);
@@ -38,8 +41,11 @@ abstract class AggregateRoot extends Entity implements EventStore
         }
     }
 
-    private function generateKeyOffset(Event $event): string
+    public function createEvent(string $eventName, array $data): Event
     {
-        return md5(serialize($event));
+        $event = new $eventName($this->id, $data);
+        $this->addEvent($event);
+
+        return $event;
     }
 }

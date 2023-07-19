@@ -20,7 +20,7 @@ class KafkaConnectionFactory extends RdKafkaConnectionFactory
 
     public function setConfig(?array $config = null): void
     {
-        $this->config = $this->config ?? new Conf();
+        $this->config ??= new Conf();
         if (isset($config['topic']) && is_array($config['topic'])) {
             foreach ($config['topic'] as $key => $value) {
                 $this->config->set($key, $value);
@@ -60,6 +60,7 @@ class KafkaConnectionFactory extends RdKafkaConnectionFactory
         if (!$this->consumer) {
             $this->consumer = new KafkaConsumer($this->config);
         }
+
         return $this->consumer;
     }
 

@@ -20,8 +20,6 @@ class Money
 
     /**
      * Set the value of amount.
-     *
-     * @param float $amount
      */
     public function setAmount(float $amount): self
     {

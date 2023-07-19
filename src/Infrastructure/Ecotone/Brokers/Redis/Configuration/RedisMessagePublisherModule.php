@@ -78,7 +78,8 @@ final class RedisMessagePublisherModule extends NoExternalConfigurationModule im
                         ->withAutoDeclareOnSend($messagePublisher->isAutoDeclareOnSend())
                         ->withHeaderMapper($messagePublisher->getHeaderMapper())
                         ->withDefaultConversionMediaType($mediaType)
-                );
+                )
+            ;
         }
     }
 
