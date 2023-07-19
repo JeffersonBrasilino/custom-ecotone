@@ -20,12 +20,17 @@ class JsonToPhpConverter implements Converter
     public function convert($source, TypeDescriptor $sourceType, MediaType $sourceMediaType, TypeDescriptor $targetType, MediaType $targetMediaType)
     {
         $data = json_decode($source, true, 512, JSON_THROW_ON_ERROR);
-        $commandType = $targetType->getTypeHint();
-
-        if ('array' == $commandType) {
+        if ($targetType->isClassNotInterface()) {
+            $commandType = $targetType->getTypeHint();
+            return new $commandType(...$data);
+        }
+        if ($targetType->isNonCollectionArray()) {
             return $data;
         }
+        if ($targetType->isCompoundObjectType()) {
+            return json_decode(json_encode($data), false);
+        }
 
-        return json_decode(json_encode($data), false);
+        return $source;
     }
 }
