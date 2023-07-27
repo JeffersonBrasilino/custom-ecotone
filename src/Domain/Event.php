@@ -14,4 +14,15 @@ abstract class Event
         public readonly ?\DateTimeImmutable $occurredOn = new \DateTimeImmutable()
     ) {
     }
+
+    public function jsonSerialize()
+    {
+        $data = get_object_vars($this);
+
+        if ($data['occurredOn'] instanceof \DateTimeInterface) {
+            $data['occurredOn'] = $data['occurredOn']->getTimestamp();
+        }
+
+        return $data;
+    }
 }

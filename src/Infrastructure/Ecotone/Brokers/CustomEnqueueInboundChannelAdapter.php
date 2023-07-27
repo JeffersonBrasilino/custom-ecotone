@@ -47,7 +47,7 @@ abstract class CustomEnqueueInboundChannelAdapter extends EnqueueInboundChannelA
                 return null;
             }
 
-            $convertedMessage = $this->inboundMessageConverter->toMessage($message, $consumer);
+            $convertedMessage = $this->inboundMessageConverter->toMessage($message, $consumer, $this->conversionService);
             $convertedMessage = $this->enrichMessage($message, $convertedMessage);
 
             return $convertedMessage->build();

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Frete\Core\Infrastructure\Ecotone\Brokers\Kafka;
 
-use Ecotone\Enqueue\{CachedConnectionFactory, OutboundMessageConverter};
+use Ecotone\Enqueue\CachedConnectionFactory;
+use Ecotone\Messaging\Channel\PollableChannel\Serialization\OutboundMessageConverter;
+use Ecotone\Messaging\Conversion\ConversionService;
 use Ecotone\Messaging\Message;
 use Enqueue\RdKafka\RdKafkaTopic;
 use Frete\Core\Infrastructure\Ecotone\Brokers\CustomEnqueueOutboundChannelAdapter;
@@ -13,13 +15,19 @@ use Interop\Queue\Message as buildMessageReturn;
 
 final class KafkaOutboundChannelAdapter extends CustomEnqueueOutboundChannelAdapter
 {
-    public function __construct(CachedConnectionFactory $connectionFactory, private RdKafkaTopic $topic, bool $autoDeclare, OutboundMessageConverter $outboundMessageConverter, IHeaderMessage $messageBrokerHeaders)
-    {
+    public function __construct(
+        CachedConnectionFactory $connectionFactory,
+        private RdKafkaTopic $topic, bool $autoDeclare,
+        OutboundMessageConverter $outboundMessageConverter,
+        ConversionService $conversionService,
+        IHeaderMessage $messageBrokerHeaders
+    ) {
         parent::__construct(
             $connectionFactory,
             $topic,
             $autoDeclare,
             $outboundMessageConverter,
+            $conversionService,
             $messageBrokerHeaders
         );
     }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Frete\Core\Infrastructure\Ecotone\Brokers\Kafka;
 
-use Ecotone\Enqueue\{CachedConnectionFactory, EnqueueOutboundChannelAdapterBuilder, HttpReconnectableConnectionFactory, OutboundMessageConverter};
+use Ecotone\Enqueue\{CachedConnectionFactory, EnqueueOutboundChannelAdapterBuilder, HttpReconnectableConnectionFactory};
+use Ecotone\Messaging\Channel\PollableChannel\Serialization\OutboundMessageConverter;
 use Ecotone\Messaging\Conversion\ConversionService;
 use Ecotone\Messaging\Handler\{ChannelResolver, ReferenceSearchService};
-use Ecotone\Messaging\MessageConverter\DefaultHeaderMapper;
-use Enqueue\RdKafka\{RdKafkaConnectionFactory, RdKafkaTopic};
+use Enqueue\RdKafka\RdKafkaTopic;
 use Frete\Core\Infrastructure\Ecotone\Brokers\Kafka\Configuration\KafkaTopicConfiguration;
 use Frete\Core\Infrastructure\Ecotone\Brokers\Kafka\Connection\KafkaConnectionFactory;
 use Frete\Core\Infrastructure\Ecotone\Brokers\MessageBrokerHeaders\DefaultMessageHeader;
@@ -36,16 +36,16 @@ class KafkaOutboundChannelAdapterBuilder extends EnqueueOutboundChannelAdapterBu
         $conversionService = $referenceSearchService->get(ConversionService::REFERENCE_NAME);
 
         // call the headers HERE!
-        $messageBrokerHeadersReferenceName = new ($this->messageBrokerHeadersReferenceName)();
+        $messageBrokerHeadersReferenceName = new($this->messageBrokerHeadersReferenceName)();
 
         $this->topicConfig ??= new KafkaTopicConfiguration();
-        $headerMapper = DefaultHeaderMapper::createWith([], $this->headerMapper, $conversionService);
 
         return new KafkaOutboundChannelAdapter(
             CachedConnectionFactory::createFor(new HttpReconnectableConnectionFactory($connectionFactory)),
             $this->buildKafkaTopic($this->topicName, $this->topicConfig),
             $this->autoDeclare,
-            new OutboundMessageConverter($headerMapper, $conversionService, $this->defaultConversionMediaType, $this->defaultDeliveryDelay, $this->defaultTimeToLive, $this->defaultPriority, $this->staticHeadersToAdd),
+            new OutboundMessageConverter($this->headerMapper, $this->defaultConversionMediaType, $this->defaultDeliveryDelay, $this->defaultTimeToLive, $this->defaultPriority, $this->staticHeadersToAdd),
+            $conversionService,
             $messageBrokerHeadersReferenceName
         );
     }

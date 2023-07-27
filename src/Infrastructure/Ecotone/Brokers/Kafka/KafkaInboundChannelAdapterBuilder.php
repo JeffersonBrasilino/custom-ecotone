@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Frete\Core\Infrastructure\Ecotone\Brokers\Kafka;
 
 use Ecotone\Enqueue\{EnqueueInboundChannelAdapterBuilder, InboundMessageConverter};
+use Ecotone\Enqueue\EnqueueHeader;
 use Ecotone\Messaging\Conversion\ConversionService;
 use Ecotone\Messaging\Endpoint\PollingMetadata;
 use Ecotone\Messaging\Handler\{ChannelResolver, ReferenceSearchService};
@@ -37,7 +38,7 @@ final class KafkaInboundChannelAdapterBuilder extends EnqueueInboundChannelAdapt
         /** @var ConversionService $conversionService */
         $conversionService = $referenceSearchService->get(ConversionService::REFERENCE_NAME);
 
-        $headerMapper = DefaultHeaderMapper::createWith($this->headerMapper, [], $conversionService);
+        $headerMapper = DefaultHeaderMapper::createWith($this->headerMapper, []);
 
         return new KafkaInboundChannelAdapter(
             $connectionFactory,
@@ -45,8 +46,9 @@ final class KafkaInboundChannelAdapterBuilder extends EnqueueInboundChannelAdapt
             $this->declareOnStartup,
             $this->messageChannelName,
             $this->receiveTimeoutInMilliseconds,
-            new InboundMessageConverter($this->getEndpointId(), $this->acknowledgeMode, $headerMapper),
-            $this->topicConfig
+            new InboundMessageConverter($this->getEndpointId(), $this->acknowledgeMode, $headerMapper, EnqueueHeader::HEADER_ACKNOWLEDGE),
+            $conversionService,
+            $this->topicConfig,
         );
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Frete\Core\Infrastructure\Ecotone\Brokers\Kafka;
 
 use Ecotone\Enqueue\{CachedConnectionFactory, HttpReconnectableConnectionFactory, InboundMessageConverter};
+use Ecotone\Messaging\Conversion\ConversionService;
 use Ecotone\Messaging\Endpoint\InboundChannelAdapterEntrypoint;
 use Frete\Core\Infrastructure\Ecotone\Brokers\CustomEnqueueInboundChannelAdapter;
 use Frete\Core\Infrastructure\Ecotone\Brokers\Kafka\Configuration\KafkaTopicConfiguration;
@@ -22,7 +23,8 @@ final class KafkaInboundChannelAdapter extends CustomEnqueueInboundChannelAdapte
         string $queueName,
         int $receiveTimeoutInMilliseconds,
         InboundMessageConverter $inboundMessageConverter,
-        private ?KafkaTopicConfiguration $topicConfig = null
+        ConversionService $conversionService,
+        private ?KafkaTopicConfiguration $topicConfig = null,
     ) {
         $this->connection = $connectionFactory;
         parent::__construct(
@@ -32,6 +34,7 @@ final class KafkaInboundChannelAdapter extends CustomEnqueueInboundChannelAdapte
             $queueName,
             $receiveTimeoutInMilliseconds,
             $inboundMessageConverter,
+            $conversionService
         );
     }
 
@@ -54,7 +57,7 @@ final class KafkaInboundChannelAdapter extends CustomEnqueueInboundChannelAdapte
 
         $kafkaConsumer = $this->connection->getConsumer('false');
         $topicPartitions = array_map(
-            fn ($val) => $this->connection->createTopicPartition($this->queueName, $val),
+            fn($val) => $this->connection->createTopicPartition($this->queueName, $val),
             $this->topicConfig->getConsumerPartitions()
         );
 

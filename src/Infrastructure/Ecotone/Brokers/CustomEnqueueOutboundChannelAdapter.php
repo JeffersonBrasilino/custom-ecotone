@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Frete\Core\Infrastructure\Ecotone\Brokers;
 
-use Ecotone\Enqueue\OutboundMessage;
-use Ecotone\Enqueue\{CachedConnectionFactory, OutboundMessageConverter};
+use Ecotone\Enqueue\CachedConnectionFactory;
 use Ecotone\Messaging\{Message, MessageHandler, MessageHeaders};
+use Ecotone\Messaging\Channel\PollableChannel\Serialization\OutboundMessage;
+use Ecotone\Messaging\Conversion\ConversionService;
 use Frete\Core\Infrastructure\Ecotone\Brokers\MessageBrokerHeaders\IHeaderMessage;
 use Interop\Queue\{Destination, Message as buildMessageReturn};
+use Ecotone\Messaging\Channel\PollableChannel\Serialization\OutboundMessageConverter;
 
 abstract class CustomEnqueueOutboundChannelAdapter implements MessageHandler
 {
@@ -20,6 +22,7 @@ abstract class CustomEnqueueOutboundChannelAdapter implements MessageHandler
         protected Destination $destination,
         protected bool $autoDeclare,
         protected OutboundMessageConverter $outboundMessageConverter,
+        protected ConversionService $conversionService,
         private IHeaderMessage $messageBrokerHeaders
     ) {
     }
@@ -32,6 +35,7 @@ abstract class CustomEnqueueOutboundChannelAdapter implements MessageHandler
             $this->initialize();
             $this->initialized = true;
         }
+
         $messageToSend = $this->buildMessage($message);
         $this->connectionFactory->getProducer()
             ->setTimeToLive($this->outboundMessage->getTimeToLive())
@@ -42,7 +46,7 @@ abstract class CustomEnqueueOutboundChannelAdapter implements MessageHandler
 
     protected function buildMessage(Message $message): buildMessageReturn
     {
-        $this->outboundMessage = $outboundMessage = $this->outboundMessageConverter->prepare($message);
+        $this->outboundMessage = $outboundMessage = $this->outboundMessageConverter->prepare($message, $this->conversionService);
         $headers = $outboundMessage->getHeaders();
         $headers[MessageHeaders::CONTENT_TYPE] = $outboundMessage->getContentType();
 

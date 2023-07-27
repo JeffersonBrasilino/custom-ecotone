@@ -3,7 +3,7 @@
     "description": "core package for php projects opnative using ddd, cqrs, eda with laravel and ecotone framework",
     "type": "library",
     "license": "MIT",
-    "version": "0.7.0",
+    "version": "0.9.5",
     "authors": [
         {
             "name": "Mateus Anjos",
@@ -52,7 +52,8 @@
         "release": "conventional-changelog --commit",
         "release:patch": "conventional-changelog --patch --commit",
         "release:minor": "conventional-changelog --minor --commit",
-        "release:major": "conventional-changelog --major --commit"
+        "release:major": "conventional-changelog --major --commit",
+        "release:rc": "conventional-changelog --rc --commit"
     },
     "require-dev": {
         "captainhook/captainhook": "^5.16",
@@ -65,13 +66,14 @@
         "ramsey/conventional-commits": "^1.5"
     },
     "require": {
-        "ecotone/enqueue": "^1.88",
-        "ecotone/laravel": "^1.88",
-        "ecotone/redis": "^1.88",
-        "ecotone/jms-converter": "^1.82",
-        "ecotone/sqs": "^1.88",
+        "ecotone/enqueue": "^1.90",
+        "ecotone/laravel": "^1.90",
+        "ecotone/redis": "^1.90",
+        "ecotone/jms-converter": "^1.90",
+        "ecotone/sqs": "^1.90",
         "enqueue/enqueue": "^0.10.18",
         "enqueue/rdkafka": "^0.10.18",
-        "guzzlehttp/guzzle": "^7.7"
+        "guzzlehttp/guzzle": "^7.7",
+        "predis/predis": "^1.1"
     }
 }
