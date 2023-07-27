@@ -57,7 +57,7 @@ final class KafkaInboundChannelAdapter extends CustomEnqueueInboundChannelAdapte
 
         $kafkaConsumer = $this->connection->getConsumer('false');
         $topicPartitions = array_map(
-            fn($val) => $this->connection->createTopicPartition($this->queueName, $val),
+            fn ($val) => $this->connection->createTopicPartition($this->queueName, $val),
             $this->topicConfig->getConsumerPartitions()
         );
 

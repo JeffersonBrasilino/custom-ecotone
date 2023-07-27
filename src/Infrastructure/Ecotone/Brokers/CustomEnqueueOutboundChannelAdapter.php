@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Frete\Core\Infrastructure\Ecotone\Brokers;
 
 use Ecotone\Enqueue\CachedConnectionFactory;
-use Ecotone\Messaging\{Message, MessageHandler, MessageHeaders};
 use Ecotone\Messaging\Channel\PollableChannel\Serialization\OutboundMessage;
+use Ecotone\Messaging\Channel\PollableChannel\Serialization\OutboundMessageConverter;
 use Ecotone\Messaging\Conversion\ConversionService;
+use Ecotone\Messaging\{Message, MessageHandler, MessageHeaders};
 use Frete\Core\Infrastructure\Ecotone\Brokers\MessageBrokerHeaders\IHeaderMessage;
 use Interop\Queue\{Destination, Message as buildMessageReturn};
-use Ecotone\Messaging\Channel\PollableChannel\Serialization\OutboundMessageConverter;
 
 abstract class CustomEnqueueOutboundChannelAdapter implements MessageHandler
 {

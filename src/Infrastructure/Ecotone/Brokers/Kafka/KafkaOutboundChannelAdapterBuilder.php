@@ -36,7 +36,7 @@ class KafkaOutboundChannelAdapterBuilder extends EnqueueOutboundChannelAdapterBu
         $conversionService = $referenceSearchService->get(ConversionService::REFERENCE_NAME);
 
         // call the headers HERE!
-        $messageBrokerHeadersReferenceName = new($this->messageBrokerHeadersReferenceName)();
+        $messageBrokerHeadersReferenceName = new ($this->messageBrokerHeadersReferenceName)();
 
         $this->topicConfig ??= new KafkaTopicConfiguration();
 

@@ -17,7 +17,8 @@ final class KafkaOutboundChannelAdapter extends CustomEnqueueOutboundChannelAdap
 {
     public function __construct(
         CachedConnectionFactory $connectionFactory,
-        private RdKafkaTopic $topic, bool $autoDeclare,
+        private RdKafkaTopic $topic,
+        bool $autoDeclare,
         OutboundMessageConverter $outboundMessageConverter,
         ConversionService $conversionService,
         IHeaderMessage $messageBrokerHeaders
