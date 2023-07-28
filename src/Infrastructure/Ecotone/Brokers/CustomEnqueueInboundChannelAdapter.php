@@ -47,6 +47,12 @@ abstract class CustomEnqueueInboundChannelAdapter extends EnqueueInboundChannelA
                 return null;
             }
 
+            if (!empty($message->getHeaders())) {
+                $payload = json_decode($message->getBody(), true);
+                $payload['messageHeader'] = $message->getHeaders();
+                $message->setBody(json_encode($payload));
+            }
+
             $convertedMessage = $this->inboundMessageConverter->toMessage($message, $consumer, $this->conversionService);
             $convertedMessage = $this->enrichMessage($message, $convertedMessage);
 

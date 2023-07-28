@@ -9,5 +9,5 @@ use Frete\Core\Shared\Result;
 
 interface Handler
 {
-    public function handle(Action|Event $actionOrEvent): Result;
+    public function handle(Action|Event|IntegrationEvent $actionOrEvent): Result;
 }

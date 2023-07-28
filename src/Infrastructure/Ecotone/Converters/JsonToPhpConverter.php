@@ -7,6 +7,7 @@ namespace Frete\Core\Infrastructure\Ecotone\Converters;
 use Ecotone\Messaging\Attribute\MediaTypeConverter;
 use Ecotone\Messaging\Conversion\{Converter, MediaType};
 use Ecotone\Messaging\Handler\TypeDescriptor;
+use Frete\Core\Application\IntegrationEvent;
 
 #[MediaTypeConverter]
 class JsonToPhpConverter implements Converter
@@ -22,8 +23,12 @@ class JsonToPhpConverter implements Converter
         $data = json_decode($source, true, 512, JSON_THROW_ON_ERROR);
         if ($targetType->isClassNotInterface()) {
             $commandType = $targetType->getTypeHint();
-
-            return new $commandType(...$data);
+            $dataParams = $data['data'];
+            $instance = new $commandType(...$dataParams);
+            if (is_subclass_of($instance, IntegrationEvent::class) && !empty($data['messageHeader'])) {
+                $instance->setMessageHeader($data['messageHeader']);
+            }
+            return $instance;
         }
         if ($targetType->isNonCollectionArray()) {
             return $data;

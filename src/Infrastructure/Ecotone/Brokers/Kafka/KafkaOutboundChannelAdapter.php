@@ -9,6 +9,7 @@ use Ecotone\Messaging\Channel\PollableChannel\Serialization\OutboundMessageConve
 use Ecotone\Messaging\Conversion\ConversionService;
 use Ecotone\Messaging\Message;
 use Enqueue\RdKafka\RdKafkaTopic;
+use Frete\Core\Domain\Event;
 use Frete\Core\Infrastructure\Ecotone\Brokers\CustomEnqueueOutboundChannelAdapter;
 use Frete\Core\Infrastructure\Ecotone\Brokers\MessageBrokerHeaders\IHeaderMessage;
 use Interop\Queue\Message as buildMessageReturn;
@@ -44,14 +45,14 @@ final class KafkaOutboundChannelAdapter extends CustomEnqueueOutboundChannelAdap
         /** @var \Enqueue\RdKafka\RdKafkaMessage */
         $kafkaMessage = parent::buildMessage($message);
         $props = $kafkaMessage->getProperties();
+
         if (isset($props['partition']) && is_int($props['partition'])) {
             $kafkaMessage->setPartition($props['partition']);
         }
 
-        if (is_subclass_of($message->getPayload(), \Frete\Core\Domain\Event::class)) {
-            $messageId = $message->getPayload()->identifier;
-            $kafkaMessage->setMessageId($messageId);
-            $kafkaMessage->setKey($messageId);
+        if (is_subclass_of($message->getPayload(), Event::class)) {
+            $payload = $message->getPayload();
+            $kafkaMessage->setKey($payload->getIdentifier());
         }
 
         return $kafkaMessage;

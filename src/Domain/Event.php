@@ -4,25 +4,49 @@ declare(strict_types=1);
 
 namespace Frete\Core\Domain;
 
+use DateTimeImmutable;
+
 abstract class Event
 {
     public function __construct(
-        public readonly string|int $identifier,
+        private string|int $identifier,
         public readonly ?array $data = [],
-        public readonly ?string $schema = 'https://schema.org/',
-        public readonly ?string $version = '1.0',
-        public readonly ?\DateTimeImmutable $occurredOn = new \DateTimeImmutable()
-    ) {
-    }
-
-    public function jsonSerialize()
+        private string $schema = 'https://schema.org/',
+        private string $version = '1.0',
+        private DateTimeImmutable $occurredOn = new DateTimeImmutable(),
+        private array $messageHeaders = [])
     {
-        $data = get_object_vars($this);
-
-        if ($data['occurredOn'] instanceof \DateTimeInterface) {
-            $data['occurredOn'] = $data['occurredOn']->getTimestamp();
-        }
-
-        return $data;
     }
+
+    public function setMessageHeaders(array $messageHeaders): self
+    {
+        $this->messageHeaders = $messageHeaders;
+        return $this;
+    }
+
+    public function getMessageHeaders(): array
+    {
+        return $this->messageHeaders;
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
+    public function getSchema(): string
+    {
+        return $this->schema;
+    }
+
+    public function getVersion(): string
+    {
+        return $this->version;
+    }
+
+    public function getOccurredOn(): DateTimeImmutable
+    {
+        return $this->occurredOn;
+    }
+
 }

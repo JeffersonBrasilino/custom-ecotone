@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 namespace Frete\Core\Domain\Validators;
-
-class LengthValidator extends Validator
+class OptionalLengthValidator extends Validator
 {
     private bool $isValid = false;
 
@@ -15,12 +14,11 @@ class LengthValidator extends Validator
     public function validate(mixed $input): bool
     {
         if (empty($input)) {
-            return false;
+            $this->isValid = true;
+            return $this->isValid;
         }
 
-        $inputLen = strlen($input);
-        $this->isValid = $inputLen >= $this->minLength && $inputLen <= $this->maxLength;
-
+        $this->isValid = (new LengthValidator($this->minLength, $this->maxLength))->validate($input);
         return $this->isValid;
     }
 

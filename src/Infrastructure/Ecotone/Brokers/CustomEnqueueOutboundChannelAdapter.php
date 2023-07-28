@@ -38,9 +38,9 @@ abstract class CustomEnqueueOutboundChannelAdapter implements MessageHandler
 
         $messageToSend = $this->buildMessage($message);
         $this->connectionFactory->getProducer()
-            ->setTimeToLive($this->outboundMessage->getTimeToLive())
-            ->setDeliveryDelay($this->outboundMessage->getDeliveryDelay())
-            ->send($this->destination, $messageToSend)
+        ->setTimeToLive($this->outboundMessage->getTimeToLive())
+        ->setDeliveryDelay($this->outboundMessage->getDeliveryDelay())
+        ->send($this->destination, $messageToSend)
         ;
     }
 
@@ -50,22 +50,14 @@ abstract class CustomEnqueueOutboundChannelAdapter implements MessageHandler
         $headers = $outboundMessage->getHeaders();
         $headers[MessageHeaders::CONTENT_TYPE] = $outboundMessage->getContentType();
 
-        $messageBrokerHeaders = $this->enrichHeaderMessageBroker($this->messageBrokerHeaders->getSchema(), $headers, $message->getPayload());
+        if (is_subclass_of($message->getPayload(), \Frete\Core\Domain\Event::class)) {
+            $this->messageBrokerHeaders->enrichHeaderByMessagePayload($message->getPayload());
+        }
+
+        $this->messageBrokerHeaders->enrichHeadersByArray($headers);
+
+        $messageBrokerHeaders = $this->messageBrokerHeaders->getSchema();
 
         return $this->connectionFactory->createContext()->createMessage($outboundMessage->getPayload(), $headers, $messageBrokerHeaders);
-    }
-
-    protected function enrichHeaderMessageBroker(array $headersBrokerSchema, array $messageProperties, mixed $messagePayload)
-    {
-        if (!empty($messageProperties['__TypeId__']) && empty($headersBrokerSchema['eventType'])) {
-            $transformToEventType = str_replace('\\', '.', $messageProperties['__TypeId__']);
-            $headersBrokerSchema['EventType'] = $transformToEventType;
-        }
-
-        if (!empty($messagePayload->version) && empty($headersBrokerSchema['SchemaVersion'])) {
-            $headersBrokerSchema['SchemaVersion'] = $messagePayload->version;
-        }
-
-        return $headersBrokerSchema;
     }
 }
