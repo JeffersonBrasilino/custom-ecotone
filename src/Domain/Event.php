@@ -10,11 +10,11 @@ abstract class Event
 {
     public function __construct(
         private string|int $identifier,
+        private ?string $route = null,
         public readonly ?array $data = [],
         private string $schema = 'https://schema.org/',
         private string $version = '1.0',
-        private DateTimeImmutable $occurredOn = new DateTimeImmutable(),
-        private array $messageHeaders = [])
+        private DateTimeImmutable $occurredOn = new DateTimeImmutable(), private array $messageHeaders = [])
     {
     }
 
@@ -49,4 +49,8 @@ abstract class Event
         return $this->occurredOn;
     }
 
+    public function getRoute(): ?string
+    {
+        return $this->route;
+    }
 }

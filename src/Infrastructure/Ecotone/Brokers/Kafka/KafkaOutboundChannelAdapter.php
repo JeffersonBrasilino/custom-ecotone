@@ -51,8 +51,8 @@ final class KafkaOutboundChannelAdapter extends CustomEnqueueOutboundChannelAdap
         }
 
         if (is_subclass_of($message->getPayload(), Event::class)) {
-            $payload = $message->getPayload();
-            $kafkaMessage->setKey($payload->getIdentifier());
+            $key = $kafkaMessage->getHeader('TraceId') ?: null;
+            $kafkaMessage->setKey($key);
         }
 
         return $kafkaMessage;

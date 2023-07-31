@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace Frete\Core\Infrastructure\Laravel;
 
 use Frete\Core\Application\Dispatcher;
+use Frete\Core\Application\EventDispatcher;
 use Frete\Core\Infrastructure\Ecotone\Converters\{JsonToPhpConverter, PhpToJsonConverter};
 use Frete\Core\Infrastructure\Ecotone\Dispatcher\DispatcherBus;
+use Frete\Core\Infrastructure\Ecotone\Dispatcher\EcotoneEventDispatcherBus;
+use Frete\Core\Infrastructure\Ecotone\ErrorChannel\ErrorBus;
+use Frete\Core\Infrastructure\Ecotone\ErrorChannel\EventErrorHandling;
 use Illuminate\Support\ServiceProvider;
 
 class FreteCoreProvider extends ServiceProvider
@@ -21,6 +25,8 @@ class FreteCoreProvider extends ServiceProvider
         $this->app->singleton(PhpToJsonConverter::class, PhpToJsonConverter::class);
         // @phpstan-ignore-next-line
         $this->app->bind(Dispatcher::class, DispatcherBus::class);
+
+        $this->app->bind(EventDispatcher::class, EcotoneEventDispatcherBus::class);
     }
 
     public function boot()

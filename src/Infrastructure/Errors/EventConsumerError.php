@@ -10,6 +10,6 @@ class EventConsumerError extends Event
 {
     public function __construct(string|int $id, $data = [])
     {
-        parent::__construct($id, $data);
+        parent::__construct(identifier: $id, data: $data);
     }
 }

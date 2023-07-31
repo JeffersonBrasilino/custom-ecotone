@@ -19,7 +19,6 @@ class DispatcherBus implements Dispatcher, EventStoreDispatcher
     public function __construct(
         private readonly CommandBus $commandBus,
         private readonly QueryBus $queryBus,
-        private readonly MessagePublisher $eventBus
     ) {
     }
 
@@ -34,15 +33,6 @@ class DispatcherBus implements Dispatcher, EventStoreDispatcher
                 return $this->queryBus->send($message);
             }
 
-            if (is_a($message, Event::class)) {
-                if (is_a($message, MetadataStore::class)) {
-                    $this->eventBus->convertAndSendWithMetadata($message, $message->getAllMetadata());
-                } else {
-                    $this->eventBus->convertAndSend($message);
-                }
-
-                return Result::success(true);
-            }
         } catch (\Throwable $e) {
             return Result::failure(new InfrastructureError($e->getMessage()));
         }
