@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace Frete\Core\Application;
 
-use Frete\Core\Domain\Event;
-use Frete\Core\Shared\Result;
+use Exception;
+use Frete\Core\Domain\Message\Message;
 
 interface Dispatcher
 {
-    public function dispatch(Action|Event $message): Result;
+    /**
+     * @template TMessage of Message
+     * @template TValue
+     * @template TError of Exception
+     * @param TMessage $message
+     * @return Result<TValue, TError>
+     */
+    public function dispatch(Message $message): Result;
 }

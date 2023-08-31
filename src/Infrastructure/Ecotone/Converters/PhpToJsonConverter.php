@@ -8,7 +8,7 @@ use Ecotone\Messaging\Attribute\MediaTypeConverter;
 use Ecotone\Messaging\Conversion\{Converter, MediaType};
 use Ecotone\Messaging\Handler\TypeDescriptor;
 
-#[MediaTypeConverter]
+// #[MediaTypeConverter]
 class PhpToJsonConverter implements Converter
 {
     public function matches(TypeDescriptor $sourceType, MediaType $sourceMediaType, TypeDescriptor $targetType, MediaType $targetMediaType): bool
@@ -23,7 +23,7 @@ class PhpToJsonConverter implements Converter
         if($sourceType->isClassNotInterface()){
             $source = get_object_vars($source);
         }
-        
+
         if (is_object($source)) {
             $source = (array) $source;
         }

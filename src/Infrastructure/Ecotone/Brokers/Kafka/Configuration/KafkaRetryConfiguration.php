@@ -9,7 +9,7 @@ use Ecotone\Modelling\Config\InstantRetry\InstantRetryConfiguration;
 
 class KafkaRetryConfiguration
 {
-    #[ServiceContext]
+    // #[ServiceContext]
     public function enableRetryConfiguration()
     {
         $retries = getenv('ECOTONE_KAFKA_CONSUMER_ERROR_MAX_RETRY') ? (int) getenv('ECOTONE_KAFKA_CONSUMER_ERROR_MAX_RETRY') : 2;

@@ -66,13 +66,13 @@
         "ramsey/conventional-commits": "^1.5"
     },
     "require": {
-        "ecotone/enqueue": "^1.92",
-        "ecotone/laravel": "^1.92",
-        "ecotone/redis": "^1.92",
+        "ecotone/lite-application": "^1.102",
+        "ecotone/enqueue": "^1.102",
         "ecotone/jms-converter": "^1.92",
+        "enqueue/enqueue": "^0.10.19",
+        "enqueue/rdkafka": "^0.10.19",
+        "ecotone/redis": "^1.92",
         "ecotone/sqs": "^1.92",
-        "enqueue/enqueue": "^0.10.18",
-        "enqueue/rdkafka": "^0.10.18",
         "guzzlehttp/guzzle": "^7.7",
         "predis/predis": "^1.1"
     }

@@ -9,7 +9,7 @@ use Ecotone\Messaging\Conversion\{Converter, MediaType};
 use Ecotone\Messaging\Handler\TypeDescriptor;
 use Frete\Core\Application\IntegrationEvent;
 
-#[MediaTypeConverter]
+// #[MediaTypeConverter]
 class JsonToPhpConverter implements Converter
 {
     public function matches(TypeDescriptor $sourceType, MediaType $sourceMediaType, TypeDescriptor $targetType, MediaType $targetMediaType): bool
