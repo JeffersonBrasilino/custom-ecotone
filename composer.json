@@ -1,53 +1,23 @@
 {
-    "name": "frete/core",
-    "description": "core package for php projects opnative using ddd, cqrs, eda with laravel and ecotone framework",
-    "type": "library",
-    "license": "MIT",
-    "version": "0.9.5",
+    "name": "chapa-php/infrastructure",
     "authors": [
         {
-            "name": "Mateus Anjos",
+            "name": "Mateus Macedo Dos Anjos",
             "email": "mateus.anjos@fretebras.com.br"
         }
     ],
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "process-timeout": 0,
-        "allow-plugins": {
-            "captainhook/plugin-composer": true
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "autoload": {
-        "psr-4": {
-            "Frete\\Core\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
-    },
     "scripts": {
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
+        "unit-test": "vendor/bin/pest --no-coverage",
+        "unit-test:debug": "php -d memory_limit=-1 -d display_errors=on -d xdebug.mode=debug -d xdebug.client_host=127.0.0.1 -d xdebug.client_port=9003 -d xdebug.start_with_request=1 vendor/bin/pest --no-coverage",
+        "unit-test:coverage": "vendor/bin/pest --coverage",
         "code-analyze": " php -d memory_limit=-1 vendor/bin/phpstan analyze",
         "code-analyze:report": " php -d memory_limit=-1 vendor/bin/phpstan analyze --error-format=gitlab > ${REPORT_PATH}quality.json || true",
         "check-style": "vendor/bin/php-cs-fixer fix --diff --verbose --dry-run .",
         "lint-fix": "vendor/bin/php-cs-fixer fix .",
         "lint-validation": "vendor/bin/php-cs-fixer fix -v --using-cache no --dry-run --stop-on-violation",
-        "unit-test": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --testdox --path-coverage",
-        "unit-test:unit": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --testsuite=Unit --testdox",
-        "unit-test:integration": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --testsuite=Integration --testdox",
-        "unit-test:coverage": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --coverage-html=coverage --log-junit coverage/logfile.xml --coverage-clover coverage/coverage.xml --testdox",
-        "unit-test:coverage-all": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --coverage-html=coverage --log-junit coverage/logfile.xml --coverage-clover coverage/coverage.xml --testdox --path-coverage",
-        "unit-test:report": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --testdox --coverage-text --coverage-clover=coverage/coverage.xml --log-junit=coverage/logfile.xml",
-        "unit-test:report-all": "XDEBUG_MODE=coverage php -d memory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml --testdox --coverage-text --coverage-clover=coverage/coverage.xml --log-junit=coverage/logfile.xml --path-coverage",
-        "unit-test:debug": "php -d memory_limit=-1 -d display_errors=on -d xdebug.mode=debug -d xdebug.client_host=127.0.0.1 -d xdebug.client_port=9003 -d xdebug.start_with_request=1 vendor/bin/phpunit --configuration phpunit.xml --testdox",
         "changelog": "conventional-changelog",
         "release": "conventional-changelog --commit",
         "release:patch": "conventional-changelog --patch --commit",
@@ -55,25 +25,58 @@
         "release:major": "conventional-changelog --major --commit",
         "release:rc": "conventional-changelog --rc --commit"
     },
+    "autoload": {
+        "psr-4": {
+            "ChapaPhp\\Infrastructure\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "require-dev": {
-        "captainhook/captainhook": "^5.16",
-        "captainhook/plugin-composer": "^5.3",
-        "fakerphp/faker": "^1.23",
-        "friendsofphp/php-cs-fixer": "^3.18",
-        "marcocesarato/php-conventional-changelog": "^1.17",
+        "pestphp/pest": "^2.16",
+        "ramsey/conventional-commits": "^1.5",
         "phpstan/phpstan": "^1.10",
-        "phpunit/phpunit": "^10.2",
-        "ramsey/conventional-commits": "^1.5"
+        "marcocesarato/php-conventional-changelog": "^1.17",
+        "friendsofphp/php-cs-fixer": "^3.23",
+        "captainhook/plugin-composer": "^5.3",
+        "captainhook/captainhook": "^5.16",
+        "pestphp/pest-plugin-type-coverage": "^2.0",
+        "mockery/mockery": "^1.6",
+        "phpunit/php-code-coverage": "^10.1",
+        "pestphp/pest-plugin-drift": "^2.3",
+        "pestphp/pest-plugin-faker": "^2.0",
+        "phpstan/extension-installer": "^1.3",
+        "phpstan/phpstan-beberlei-assert": "^1.1",
+        "phpstan/phpstan-phpunit": "^1.3",
+        "phpstan/phpstan-strict-rules": "^1.5",
+        "phpstan/phpstan-mockery": "^1.1",
+        "jangregor/phpstan-prophecy": "^1.0",
+        "timeweb/phpstan-enum": "^3.1",
+        "struggle-for-php/sfp-phpstan-psr-log": "^0.13.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "captainhook/plugin-composer": true,
+            "phpstan/extension-installer": true
+        }
     },
     "require": {
-        "ecotone/lite-application": "^1.102",
-        "ecotone/enqueue": "^1.102",
-        "ecotone/jms-converter": "^1.92",
+        "ecotone/lite-application": "^1.200",
+        "ecotone/redis": "^1.200",
+        "ecotone/sqs": "^1.200",
+        "ecotone/enqueue": "^1.200",
+        "ecotone/jms-converter": "^1.200",
         "enqueue/enqueue": "^0.10.19",
         "enqueue/rdkafka": "^0.10.19",
-        "ecotone/redis": "^1.92",
-        "ecotone/sqs": "^1.92",
-        "guzzlehttp/guzzle": "^7.7",
+        "chapa-php/application": "^0.1.0",
+        "ramsey/uuid": "^4.7",
         "predis/predis": "^1.1"
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "version": "0.8.0"
 }
